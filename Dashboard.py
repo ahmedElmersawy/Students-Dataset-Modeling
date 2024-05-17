@@ -44,7 +44,7 @@ for column in columns:
         sns.countplot(data=df, x=column, palette='Set2')
         plt.xticks(rotation=0)
         st.pyplot(plt)
-    elif column in ['GPA', 'Calculus1', 'Calculus2', 'Statistics', 'Algbera','Probability']:
+    elif column in ['GPA', 'Algbera', 'Calculus1', 'Calculus2', 'Statistics', 'Probability', 'Measure', 'Functional_analysis']:
         plt.figure(figsize=(8, 6))
         sns.histplot(data=df, x=column, bins=10, color='red')
         st.pyplot(plt)
