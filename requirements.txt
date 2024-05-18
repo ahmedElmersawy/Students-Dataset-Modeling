@@ -20,3 +20,4 @@ category_encoders
 seaborn
 folium
 pydeck
+geopy
