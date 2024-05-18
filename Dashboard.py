@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pydeck as pdk
 from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderUnavailable
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
@@ -146,49 +147,54 @@ for column in columns:
         # Geolocator setup
         geolocator = Nominatim(user_agent="from1")
 
-        # Geocode each location
+        # Geocode each location with error handling
         coordinates = {}
         for location, address in locations.items():
-            location_coords = geolocator.geocode(address)
-            if location_coords:
-                coordinates[location] = location_coords
-            else:
-                st.warning(f"Failed to geocode location: {location}")
+            try:
+                location_coords = geolocator.geocode(address)
+                if location_coords:
+                    coordinates[location] = location_coords
+                else:
+                    st.warning(f"Failed to geocode location: {location}")
+            except GeocoderUnavailable:
+                st.error(f"Geocoding service is unavailable for location: {location}")
+                break
 
-        # Create a PyDeck map centered around the mean coordinates
-        map_center = [0, 0]
         if coordinates:
-            map_center = [sum(coord.latitude for coord in coordinates.values()) / len(coordinates),
-                          sum(coord.longitude for coord in coordinates.values()) / len(coordinates)]
+            # Create a PyDeck map centered around the mean coordinates
+            map_center = [
+                sum(coord.latitude for coord in coordinates.values()) / len(coordinates),
+                sum(coord.longitude for coord in coordinates.values()) / len(coordinates)
+            ]
 
-        map_data = pd.DataFrame({
-            'lat': [coord.latitude for coord in coordinates.values()],
-            'lon': [coord.longitude for coord in coordinates.values()],
-            'name': list(coordinates.keys())
-        })
+            map_data = pd.DataFrame({
+                'lat': [coord.latitude for coord in coordinates.values()],
+                'lon': [coord.longitude for coord in coordinates.values()],
+                'name': list(coordinates.keys())
+            })
 
-        view_state = pdk.ViewState(
-            latitude=map_center[0],
-            longitude=map_center[1],
-            zoom=4
-        )
+            view_state = pdk.ViewState(
+                latitude=map_center[0],
+                longitude=map_center[1],
+                zoom=4
+            )
 
-        layer = pdk.Layer(
-            'ScatterplotLayer',
-            data=map_data,
-            get_position='[lon, lat]',
-            get_radius=10000,
-            get_fill_color=[255, 0, 0],
-            pickable=True
-        )
+            layer = pdk.Layer(
+                'ScatterplotLayer',
+                data=map_data,
+                get_position='[lon, lat]',
+                get_radius=10000,
+                get_fill_color=[255, 0, 0],
+                pickable=True
+            )
 
-        r = pdk.Deck(
-            layers=[layer],
-            initial_view_state=view_state
-        )
+            r = pdk.Deck(
+                layers=[layer],
+                initial_view_state=view_state
+            )
 
-        st.subheader("Map with Students Location")
-        st.pydeck_chart(r)
+            st.subheader("Map with Students Location")
+            st.pydeck_chart(r)
 
     elif column == 'y':
         plt.figure(figsize=(8, 6))
