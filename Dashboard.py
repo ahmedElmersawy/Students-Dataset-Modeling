@@ -47,6 +47,8 @@ for column in columns:
     elif column in ['GPA', 'Algebra', 'Calculus1', 'Calculus2', 'Statistics', 'Probability', 'Measure', 'Functional_analysis']:
         plt.figure(figsize=(8, 6))
         sns.histplot(data=df, x=column, bins=10, color='red')
+        plt.xlabel('Grades')
+        plt.ylabel('Frequency')
         st.pyplot(plt)
     elif column == 'from1':
         # Define locations
