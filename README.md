@@ -7,8 +7,9 @@ This repository showcases data visualization projects related to student dataset
 | Name              |
 | ----------------- |
 | Abdullah Samir    |
+| Ahmed Elmersawy   |
 | Amar AlAzizy      |
-| Abdelrahman Fouad |
 | Omar Atiya        |
 | Omar Khattab      |
-| Ahmed Elmersawy   |
+| Abdelrahman Fouad |
+
