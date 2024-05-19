@@ -76,7 +76,7 @@ st.title('Student Data Dashboard')
 
 for column in columns:
     st.subheader(column)
-    if column in ['race', 'class', 'from2', 'from3', 'from4']:
+    if column in ['race', 'class', 'from2', 'from4']:
         plt.figure(figsize=(8, 6))
         sns.countplot(data=df, x=column, palette='Set2')
         plt.xticks(rotation=0)
