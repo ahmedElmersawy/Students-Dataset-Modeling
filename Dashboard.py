@@ -20,10 +20,10 @@ df = load_data()
 
 # Preprocess the data
 labelencoder = LabelEncoder()
-for feature in ['from2', 'from3', 'from4']:
+for feature in ['from1', 'from2', 'from4']:
     df[feature] = labelencoder.fit_transform(df[feature])
 
-features = ['from2', 'from3', 'from4']
+features = ['from1', 'from2', 'from4']
 X = df[features]
 y = df['y']
 
